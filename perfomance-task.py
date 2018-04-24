@@ -37,20 +37,23 @@ def draw_car(cord):
     car.append(cord)
 
 def determine_light_color(light_timer):
-    
     if 500 >= light_timer >= 300:
         light_color = GREEN
     if 299 >= light_timer >= 200:
         light_color = YELLOW
     if 199 >= light_timer >= 0:
         light_color = RED
-    if light_timer == 0:
-        light_timer = 500
+    
         
    
 
 def timer():
-    pass
+    light_timer = 500
+    while light_timer >= 0:
+        light_timer -= 1
+        determine_light_color(light_timer)
+        if light_timer == 0:
+            light_timer = 500
 
 
 
@@ -63,7 +66,9 @@ for i in range(car_amount):
     cord = [x, y]
     car.append(cord)
 
-light_timer = 500
+
+
+
 # Game loop
 done = False
 
@@ -98,13 +103,9 @@ while not done:
             c[1] = 360
 
             
-    ''' light stuff '''
-    determine_light_color(light_timer)
-    light_timer -= 1
-    print(light_timer)
-    
-
-        
+    ''' time stuff '''
+    timer()
+            
     # Drawing code
     ''' sky '''
     screen.fill(BLUE)
