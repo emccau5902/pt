@@ -10,6 +10,8 @@ pygame.display.set_caption(TITLE)
 # Timer
 clock = pygame.time.Clock()
 refresh_rate = 30
+time = 500
+light_timer = time
 
 # Colors
 GREEN = (0, 175, 0)
@@ -23,11 +25,10 @@ RED = (255, 100, 100)
 
 light_color = GREEN
 
-def draw_light(color):
+def draw_light():
     pygame.draw.rect(screen, YELLOW, [565, 285, 40, 50])
     pygame.draw.rect(screen, GRAY, [580, 335, 10, 70])
     pygame.draw.ellipse(screen, GRAY, [573, 298, 25, 25])
-    pygame.draw.ellipse(screen, color, [575, 300, 20, 20])
 
 
 def draw_car(cord):
@@ -38,22 +39,11 @@ def draw_car(cord):
 
 def determine_light_color(light_timer):
     if 500 >= light_timer >= 300:
-        light_color = GREEN
+        pygame.draw.ellipse(screen, GREEN, [575, 300, 20, 20])
     if 299 >= light_timer >= 200:
-        light_color = YELLOW
+        pygame.draw.ellipse(screen, YELLOW, [575, 300, 20, 20])
     if 199 >= light_timer >= 0:
-        light_color = RED
-    
-        
-   
-
-def timer():
-    light_timer = 500
-    while light_timer >= 0:
-        light_timer -= 1
-        determine_light_color(light_timer)
-        if light_timer == 0:
-            light_timer = 500
+        pygame.draw.ellipse(screen, RED, [575, 300, 20, 20])
 
 
 
@@ -102,16 +92,17 @@ while not done:
             c[0] = -30
             c[1] = 360
 
-            
-    ''' time stuff '''
-    timer()
-            
+
+    light_timer -= 1
+    
+    
     # Drawing code
     ''' sky '''
     screen.fill(BLUE)
 
     ''' light '''
-    draw_light(light_color)
+    draw_light()
+    determine_light_color(light_timer)
     
     ''' grass '''
     pygame.draw.rect(screen, GREEN, [0, 400, 800, 200])
