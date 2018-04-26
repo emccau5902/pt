@@ -22,8 +22,9 @@ LIGHT_GRAY = (150, 150, 150)
 YELLOW = (255, 255, 40)
 RED = (255, 100, 100)
 
-
 light_color = GREEN
+
+
 
 def draw_light():
     pygame.draw.rect(screen, YELLOW, [565, 285, 40, 50])
@@ -37,16 +38,29 @@ def draw_car(cord):
     pygame.draw.rect(screen, WHITE, [x, y, 60, 40])
     car.append(cord)
 
-def determine_light_color(light_timer):
+def determine_light_color(light_timer, light_color):
+    
     if 500 >= light_timer >= 300:
-        pygame.draw.ellipse(screen, GREEN, [575, 300, 20, 20])
+        #pygame.draw.ellipse(screen, GREEN, [575, 300, 20, 20])
+        light_color = GREEN
+        
     if 299 >= light_timer >= 200:
-        pygame.draw.ellipse(screen, YELLOW, [575, 300, 20, 20])
-    if 199 >= light_timer >= 0:
-        pygame.draw.ellipse(screen, RED, [575, 300, 20, 20])
+        #pygame.draw.ellipse(screen, YELLOW, [575, 300, 20, 20])
+        light_color = YELLOW
+        
+    if 199 >= light_timer > 0:
+        #pygame.draw.ellipse(screen, RED, [575, 300, 20, 20])
+        light_color = RED
+        
+
+    if light_timer <= 0:
+        light_timer = 500
+        pygame.draw.ellipse(screen, GREEN, [575, 300, 20, 20])
 
 
+    pygame.draw.ellipse(screen, light_color, [575, 300, 20, 20])
 
+    
 '''makes car'''
 car_amount = 1
 car = []
@@ -67,7 +81,7 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-        
+        '''
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_r:
                 light_color = RED
@@ -75,7 +89,10 @@ while not done:
                 light_color = GREEN
             if event.key == pygame.K_y:
                 light_color = YELLOW
-        
+            if event.key == pygame.K_SPACE:
+                print(light_color)
+        '''
+
       
 
     # Game logic
@@ -83,7 +100,7 @@ while not done:
     ''' move car '''
     for c in car:
         if light_color == GREEN:
-            c[0] += 0.02
+            c[0] += 0.019
         if light_color == RED:
             c[0] += 0
         if light_color == YELLOW:
@@ -91,10 +108,10 @@ while not done:
         if c[0] > 850:
             c[0] = -30
             c[1] = 360
+            light_timer = 500
 
 
     light_timer -= 1
-    
     
     # Drawing code
     ''' sky '''
@@ -102,7 +119,7 @@ while not done:
 
     ''' light '''
     draw_light()
-    determine_light_color(light_timer)
+    determine_light_color(light_timer, light_color)
     
     ''' grass '''
     pygame.draw.rect(screen, GREEN, [0, 400, 800, 200])
