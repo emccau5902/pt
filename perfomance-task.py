@@ -10,8 +10,7 @@ pygame.display.set_caption(TITLE)
 # Timer
 clock = pygame.time.Clock()
 refresh_rate = 30
-time = 500
-light_timer = time
+light_timer = 500
 
 # Colors
 GREEN = (0, 175, 0)
@@ -39,17 +38,11 @@ def draw_car(cord):
     car.append(cord)
 
 def determine_light_color(light_timer, light_color):
-    
     if 500 >= light_timer >= 300:
-        #pygame.draw.ellipse(screen, GREEN, [575, 300, 20, 20])
         light_color = GREEN
-        
     if 299 >= light_timer >= 200:
-        #pygame.draw.ellipse(screen, YELLOW, [575, 300, 20, 20])
         light_color = YELLOW
-        
     if 199 >= light_timer > 0:
-        #pygame.draw.ellipse(screen, RED, [575, 300, 20, 20])
         light_color = RED
         
 
@@ -57,10 +50,23 @@ def determine_light_color(light_timer, light_color):
         light_timer = 500
         pygame.draw.ellipse(screen, GREEN, [575, 300, 20, 20])
 
-
-    pygame.draw.ellipse(screen, light_color, [575, 300, 20, 20])
-
     
+    pygame.draw.ellipse(screen, light_color, [575, 300, 20, 20])
+    return light_color
+
+def move_car(light_color):
+    for c in car:
+        if light_color == GREEN:
+            c[0] += 0.019
+        if light_color == RED:
+            c[0] += 0
+        if light_color == YELLOW:
+            c[0] += 0.0005
+        if c[0] > 850:
+            c[0] = -30
+            c[1] = 360
+            light_timer = 500
+
 '''makes car'''
 car_amount = 1
 car = []
@@ -81,36 +87,22 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-        '''
+                
         elif event.type == pygame.KEYDOWN:
+            
             if event.key == pygame.K_r:
                 light_color = RED
             if event.key == pygame.K_g:
                 light_color = GREEN
             if event.key == pygame.K_y:
                 light_color = YELLOW
+            
             if event.key == pygame.K_SPACE:
-                print(light_color)
-        '''
+                print(str(light_color))
 
       
 
     # Game logic
-
-    ''' move car '''
-    for c in car:
-        if light_color == GREEN:
-            c[0] += 0.019
-        if light_color == RED:
-            c[0] += 0
-        if light_color == YELLOW:
-            c[0] += 0.0005
-        if c[0] > 850:
-            c[0] = -30
-            c[1] = 360
-            light_timer = 500
-
-
     light_timer -= 1
     
     # Drawing code
@@ -129,6 +121,7 @@ while not done:
 
     ''' car '''
     draw_car(cord)
+    move_car(light_color)
     
     # Update screen
     pygame.display.flip()
